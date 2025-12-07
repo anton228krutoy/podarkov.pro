@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Праздничная Упаковка — Сеть магазинов подарочной упаковки</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <canvas id="snowCanvas"></canvas>
+
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">🎁</span>
+                <span class="logo-text">Праздничная Упаковка</span>
+            </div>
+            <nav class="nav">
+                <a href="#stores" class="nav-link" draggable="false">Магазины</a>
+                <a href="#order" class="nav-link" draggable="false">Заказать</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1 class="hero-title">Волшебная упаковка для ваших подарков</h1>
+                <p class="hero-subtitle">Создаём праздничное настроение с каждой коробочкой. Новогодняя коллекция уже в наших магазинах!</p>
+                <a href="#order" class="btn btn-primary">Оформить заказ</a>
+            </div>
+        </section>
+
+        <section id="stores" class="stores">
+            <div class="container">
+                <h2 class="section-title">Наши магазины</h2>
+                <div class="stores-grid">
+                    <div class="store-card">
+                        <div class="store-icon">📍</div>
+                        <h3 class="store-name">ТЦ «Метрополис»</h3>
+                        <p class="store-address">Ленинградское шоссе, д. 16А, стр. 4, 2 этаж</p>
+                        <p class="store-hours">Ежедневно: 10:00 — 22:00</p>
+                    </div>
+                    <div class="store-card">
+                        <div class="store-icon">📍</div>
+                        <h3 class="store-name">ТЦ «Атриум»</h3>
+                        <p class="store-address">ул. Земляной Вал, д. 33, 3 этаж</p>
+                        <p class="store-hours">Ежедневно: 10:00 — 22:00</p>
+                    </div>
+                    <div class="store-card">
+                        <div class="store-icon">📍</div>
+                        <h3 class="store-name">ТЦ «Европейский»</h3>
+                        <p class="store-address">пл. Киевского Вокзала, д. 2, 1 этаж</p>
+                        <p class="store-hours">Ежедневно: 10:00 — 23:00</p>
+                    </div>
+                    <div class="store-card">
+                        <div class="store-icon">📍</div>
+                        <h3 class="store-name">ТРЦ «Авиапарк»</h3>
+                        <p class="store-address">Ходынский бульвар, д. 4, 2 этаж</p>
+                        <p class="store-hours">Ежедневно: 10:00 — 22:00</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="order" class="order">
+            <div class="container">
+                <h2 class="section-title">Оформить заказ</h2>
+                <p class="section-subtitle">Заполните форму, и мы подготовим вашу упаковку к указанному времени</p>
+                
+                <form id="orderForm" class="order-form">
+                    <div class="form-group">
+                        <label for="packaging" class="form-label">Тип упаковки</label>
+                        <select id="packaging" name="packaging" class="form-input" required>
+                            <option value="">Выберите тип упаковки</option>
+                            <option value="box-small">Коробка маленькая (до 20 см)</option>
+                            <option value="box-medium">Коробка средняя (20-40 см)</option>
+                            <option value="box-large">Коробка большая (от 40 см)</option>
+                            <option value="bag">Подарочный пакет</option>
+                            <option value="wrapping">Упаковочная бумага</option>
+                            <option value="basket">Подарочная корзина</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="store" class="form-label">Магазин для получения</label>
+                        <select id="store" name="store" class="form-input" required>
+                            <option value="">Выберите магазин</option>
+                            <option value="metropolis">ТЦ «Метрополис»</option>
+                            <option value="atrium">ТЦ «Атриум»</option>
+                            <option value="european">ТЦ «Европейский»</option>
+                            <option value="aviapark">ТРЦ «Авиапарк»</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date" class="form-label">Дата получения</label>
+                            <input type="date" id="date" name="date" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="time" class="form-label">Время получения</label>
+                            <input type="time" id="time" name="time" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Номер телефона</label>
+                        <input type="tel" id="phone" name="phone" class="form-input" placeholder="+7 (999) 123-45-67" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="comment" class="form-label">Комментарий к заказу</label>
+                        <textarea id="comment" name="comment" class="form-input form-textarea" placeholder="Опишите ваши пожелания: цвет, стиль, дополнительные украшения..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-submit">Отправить заявку</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo-icon">🎁</span>
+                    <span class="logo-text">Праздничная Упаковка</span>
+                </div>
+                <p class="footer-text">Создаём праздник с 2020 года</p>
+                <p class="footer-contact">Телефон: +7 (495) 123-45-67</p>
+            </div>
+            <p class="footer-copyright">© 2025 Праздничная Упаковка. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div class="modal-icon">✨</div>
+            <h3 class="modal-title">Заявка принята!</h3>
+            <p class="modal-text">Мы свяжемся с вами в ближайшее время для подтверждения заказа.</p>
+            <button class="btn btn-primary modal-btn">Отлично!</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
