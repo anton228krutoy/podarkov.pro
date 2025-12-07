@@ -568,6 +568,6 @@ function handleGlobalBlur(e) {
     });
 }
 
-// Используем touchstart для мгновенной реакции на мобильных и mousedown для ПК
-document.addEventListener('touchstart', handleGlobalBlur, { passive: true });
-document.addEventListener('mousedown', handleGlobalBlur);
+// passive: false для iOS, чтобы работал preventDefault
+document.addEventListener('touchstart', handleGlobalFocus, { passive: false, capture: true });
+document.addEventListener('mousedown', handleGlobalFocus, { capture: true });
