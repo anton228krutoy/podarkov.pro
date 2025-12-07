@@ -558,11 +558,17 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // Сброс фокуса с полей выбора при любом касании экрана (для исправления залипаний на мобильных)
 const selectionFieldIds = ['packaging', 'city', 'store', 'date', 'time'];
 
-function handleGlobalBlur(e) {
+function handleGlobalFocus(e) {
+    // Определяем целевое поле: если клик по label, берём связанный input
+    let targetField = e.target;
+    if (e.target.tagName === 'LABEL' && e.target.htmlFor) {
+        targetField = document.getElementById(e.target.htmlFor);
+    }
+    
     selectionFieldIds.forEach(id => {
         const field = document.getElementById(id);
         // Снимаем фокус, если поле существует и касание произошло НЕ по этому полю
-        if (field && e.target !== field) {
+        if (field && field !== targetField) {
             field.blur();
         }
     });
