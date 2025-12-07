@@ -434,7 +434,13 @@ dateInput.addEventListener('input', function() {
     this.setCustomValidity('');
 });
 
-dateInput.addEventListener('blur', function() {
+// Detect mobile device
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                 (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
+
+const validationEvent = isMobile ? 'blur' : 'change';
+
+dateInput.addEventListener(validationEvent, function() {
     // Сбрасываем кастомную ошибку при любом вводе, чтобы проверить заново
     this.setCustomValidity('');
     
