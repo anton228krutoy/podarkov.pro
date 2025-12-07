@@ -37,31 +37,12 @@
         <section id="stores" class="stores">
             <div class="container">
                 <h2 class="section-title">Наши магазины</h2>
-                <div class="stores-grid">
-                    <div class="store-card">
-                        <div class="store-icon">📍</div>
-                        <h3 class="store-name">ТЦ «Метрополис»</h3>
-                        <p class="store-address">Ленинградское шоссе, д. 16А, стр. 4, 2 этаж</p>
-                        <p class="store-hours">Ежедневно: 10:00 — 22:00</p>
-                    </div>
-                    <div class="store-card">
-                        <div class="store-icon">📍</div>
-                        <h3 class="store-name">ТЦ «Атриум»</h3>
-                        <p class="store-address">ул. Земляной Вал, д. 33, 3 этаж</p>
-                        <p class="store-hours">Ежедневно: 10:00 — 22:00</p>
-                    </div>
-                    <div class="store-card">
-                        <div class="store-icon">📍</div>
-                        <h3 class="store-name">ТЦ «Европейский»</h3>
-                        <p class="store-address">пл. Киевского Вокзала, д. 2, 1 этаж</p>
-                        <p class="store-hours">Ежедневно: 10:00 — 23:00</p>
-                    </div>
-                    <div class="store-card">
-                        <div class="store-icon">📍</div>
-                        <h3 class="store-name">ТРЦ «Авиапарк»</h3>
-                        <p class="store-address">Ходынский бульвар, д. 4, 2 этаж</p>
-                        <p class="store-hours">Ежедневно: 10:00 — 22:00</p>
-                    </div>
+                <div class="city-selector">
+                    <button class="city-btn active" data-city="moscow">Москва</button>
+                    <button class="city-btn" data-city="spb">Санкт-Петербург</button>
+                </div>
+                <div class="stores-grid" id="storesGrid">
+                    <!-- Store cards will be rendered by JavaScript -->
                 </div>
             </div>
         </section>

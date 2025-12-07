@@ -1,3 +1,79 @@
+// ===== Stores Data =====
+const storesData = {
+    moscow: [
+        {
+            name: 'ТЦ «Метрополис»',
+            address: 'Ленинградское шоссе, д. 16А, стр. 4, 2 этаж',
+            hours: 'Ежедневно: 10:00 — 22:00'
+        },
+        {
+            name: 'ТЦ «Атриум»',
+            address: 'ул. Земляной Вал, д. 33, 3 этаж',
+            hours: 'Ежедневно: 10:00 — 22:00'
+        },
+        {
+            name: 'ТЦ «Европейский»',
+            address: 'пл. Киевского Вокзала, д. 2, 1 этаж',
+            hours: 'Ежедневно: 10:00 — 23:00'
+        },
+        {
+            name: 'ТРЦ «Авиапарк»',
+            address: 'Ходынский бульвар, д. 4, 2 этаж',
+            hours: 'Ежедневно: 10:00 — 22:00'
+        }
+    ],
+    spb: [
+        {
+            name: 'ТРК «Галерея»',
+            address: 'Лиговский пр., д. 30А, 2 этаж',
+            hours: 'Ежедневно: 10:00 — 22:00'
+        },
+        {
+            name: 'ТЦ «Невский Центр»',
+            address: 'Невский пр., д. 114-116, 3 этаж',
+            hours: 'Ежедневно: 10:00 — 22:00'
+        },
+        {
+            name: 'ТРК «Европолис»',
+            address: 'пр. Энгельса, д. 154, 1 этаж',
+            hours: 'Ежедневно: 10:00 — 22:00'
+        }
+    ]
+};
+
+// ===== Stores Rendering =====
+function renderStores(city) {
+    const storesGrid = document.getElementById('storesGrid');
+    const stores = storesData[city] || [];
+    
+    storesGrid.innerHTML = stores.map(store => `
+        <div class="store-card">
+            <div class="store-icon">📍</div>
+            <h3 class="store-name">${store.name}</h3>
+            <p class="store-address">${store.address}</p>
+            <p class="store-hours">${store.hours}</p>
+        </div>
+    `).join('');
+}
+
+// ===== City Selector =====
+const cityButtons = document.querySelectorAll('.city-btn');
+
+cityButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        // Update active button state
+        cityButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        // Render stores for selected city
+        const city = btn.dataset.city;
+        renderStores(city);
+    });
+});
+
+// Initialize with Moscow stores
+renderStores('moscow');
+
 // ===== Snowflakes Animation =====
 const canvas = document.getElementById('snowCanvas');
 const ctx = canvas.getContext('2d');
