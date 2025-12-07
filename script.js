@@ -553,3 +553,21 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+
+// ===== Global Focus Management =====
+// Сброс фокуса с полей выбора при любом касании экрана (для исправления залипаний на мобильных)
+const selectionFieldIds = ['packaging', 'city', 'store', 'date', 'time'];
+
+function handleGlobalBlur(e) {
+    selectionFieldIds.forEach(id => {
+        const field = document.getElementById(id);
+        // Снимаем фокус, если поле существует и касание произошло НЕ по этому полю
+        if (field && e.target !== field) {
+            field.blur();
+        }
+    });
+}
+
+// Используем touchstart для мгновенной реакции на мобильных и mousedown для ПК
+document.addEventListener('touchstart', handleGlobalBlur, { passive: true });
+document.addEventListener('mousedown', handleGlobalBlur);
