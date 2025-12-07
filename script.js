@@ -656,6 +656,13 @@ ${storeHashtag} <b>Новый заказ!</b>
                 select.selectedIndex = -1;
                 updateSelectState(select);
             });
+            // Reset date and time inputs visual state
+            ['date', 'time'].forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    updateInputState(input);
+                }
+            });
             updateStoreOptions();
         } else {
             throw new Error('Telegram API Error');
