@@ -290,19 +290,14 @@ if (isIOS) {
     // Handle focus explicitly on touchstart
     allSelects.forEach(select => {
         select.addEventListener('touchstart', (e) => {
-            // Find currently focused element
-            const activeElement = document.activeElement;
-            
-            // If another select is focused, blur it immediately
-            if (activeElement && activeElement.tagName === 'SELECT' && activeElement !== select) {
-                // Blur the currently open select
-                activeElement.blur();
-                
-                // Stop propagation to prevent default browser behavior of closing/reopening
-                // e.preventDefault(); 
-                // Don't prevent default here, let the touch trigger focus on the new select naturally
-                // But the blur above ensures the state is clean before that happens
-            }
+            // Aggressively blur all other selects to ensure clean state
+            // This handles cases where focus might have formally moved to body
+            // but the picker state is still resetting
+            allSelects.forEach(otherSelect => {
+                if (otherSelect !== select) {
+                    otherSelect.blur();
+                }
+            });
         }, { passive: true });
     });
 }
