@@ -412,6 +412,25 @@ body {
     color: var(--color-text-muted);
 }
 
+/* Date and Time inputs placeholder styling */
+input[type="date"].form-input,
+input[type="time"].form-input {
+    color: var(--color-text-muted);
+    min-height: 52px; /* Ensure height match */
+}
+
+input[type="date"].form-input.has-value,
+input[type="time"].form-input.has-value {
+    color: var(--color-white);
+}
+
+/* Fix for WebKit date input placeholder color if needed */
+input[type="date"]::-webkit-datetime-edit-fields-wrapper,
+input[type="time"]::-webkit-datetime-edit-fields-wrapper {
+    /* inherit color from input */
+    display: block;
+}
+
 .form-textarea {
     min-height: 120px;
     height: auto;
@@ -639,4 +658,17 @@ select.form-input option {
         font-size: 16px; /* Prevents zoom on iOS */
         min-width: 0;
     }
+}
+
+/* Принудительное наследование цвета для всех частей даты и времени */
+::-webkit-datetime-edit,
+::-webkit-datetime-edit-fields-wrapper,
+::-webkit-datetime-edit-text,
+::-webkit-datetime-edit-month-field,
+::-webkit-datetime-edit-day-field,
+::-webkit-datetime-edit-year-field,
+::-webkit-datetime-edit-hour-field,
+::-webkit-datetime-edit-minute-field,
+::-webkit-datetime-edit-ampm-field {
+    color: inherit;
 }

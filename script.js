@@ -2,41 +2,36 @@
 const storesData = {
     moscow: [
         {
-            name: 'ТЦ «Метрополис»',
-            address: 'Ленинградское шоссе, д. 16А, стр. 4, 2 этаж',
-            hours: 'Ежедневно: 10:00 — 22:00'
+            name: 'ТЦ «Мега Белая Дача»',
+            address: '1-й Покровский пр-д, 5, Котельники',
+            hours: { start: '10:00', end: '23:00' }
         },
         {
-            name: 'ТЦ «Атриум»',
-            address: 'ул. Земляной Вал, д. 33, 3 этаж',
-            hours: 'Ежедневно: 10:00 — 22:00'
+            name: 'ТРЦ «Город»',
+            address: 'Шоссе Энтузиастов, 12к2',
+            hours: { start: '10:00', end: '22:00' }
         },
         {
-            name: 'ТЦ «Европейский»',
-            address: 'пл. Киевского Вокзала, д. 2, 1 этаж',
-            hours: 'Ежедневно: 10:00 — 23:00'
+            name: 'ТРЦ «Облака»',
+            address: 'Ореховый б-р, д.22 А',
+            hours: { start: '10:00', end: '22:00' }
         },
         {
-            name: 'ТРЦ «Авиапарк»',
-            address: 'Ходынский бульвар, д. 4, 2 этаж',
-            hours: 'Ежедневно: 10:00 — 22:00'
+            name: 'ТРЦ «Косино Парк»',
+            address: 'Святоозёрская ул., 1А',
+            hours: { start: '10:00', end: '22:00' }
         }
     ],
     spb: [
         {
-            name: 'ТРК «Галерея»',
-            address: 'Лиговский пр., д. 30А, 2 этаж',
-            hours: 'Ежедневно: 10:00 — 22:00'
+            name: 'ТЦ «Галерея»',
+            address: 'Лиговский пр., 30А',
+            hours: { start: '10:00', end: '23:00' }
         },
         {
-            name: 'ТЦ «Невский Центр»',
-            address: 'Невский пр., д. 114-116, 3 этаж',
-            hours: 'Ежедневно: 10:00 — 22:00'
-        },
-        {
-            name: 'ТРК «Европолис»',
-            address: 'пр. Энгельса, д. 154, 1 этаж',
-            hours: 'Ежедневно: 10:00 — 22:00'
+            name: 'ТЦ «Рио»',
+            address: 'Ул. Фучика, д.2',
+            hours: { start: '10:00', end: '22:00' }
         }
     ]
 };
@@ -51,7 +46,7 @@ function renderStores(city) {
             <div class="store-icon">📍</div>
             <h3 class="store-name">${store.name}</h3>
             <p class="store-address">${store.address}</p>
-            <p class="store-hours">${store.hours}</p>
+            <p class="store-hours">Ежедневно: ${store.hours.start} — ${store.hours.end}</p>
         </div>
     `).join('');
 }
@@ -249,6 +244,15 @@ function updateSelectState(select) {
     }
 }
 
+// Function to handle date/time input styling
+function updateInputState(input) {
+    if (input.value) {
+        input.classList.add('has-value');
+    } else {
+        input.classList.remove('has-value');
+    }
+}
+
 // Initialize all selects in wrappers
 document.querySelectorAll('.select-wrapper select').forEach(select => {
     // Force empty state initially
@@ -259,6 +263,16 @@ document.querySelectorAll('.select-wrapper select').forEach(select => {
     select.addEventListener('change', () => {
         updateSelectState(select);
     });
+});
+
+// Initialize date and time inputs
+['date', 'time'].forEach(id => {
+    const input = document.getElementById(id);
+    if (input) {
+        updateInputState(input);
+        input.addEventListener('change', () => updateInputState(input));
+        input.addEventListener('input', () => updateInputState(input));
+    }
 });
 
 // ===== iPad Select Bug Fixes =====
@@ -341,10 +355,11 @@ updateSelectState(citySelect);
 document.getElementById('packaging').selectedIndex = -1;
 updateSelectState(document.getElementById('packaging'));
 
-// Set minimum date to today
+// Set minimum date to today and maximum to 2025-12-31
 const dateInput = document.getElementById('date');
 const today = new Date().toISOString().split('T')[0];
 dateInput.setAttribute('min', today);
+dateInput.setAttribute('max', '2025-12-31');
 
 // Phone number formatting
 const phoneInput = document.getElementById('phone');
@@ -394,6 +409,36 @@ orderForm.addEventListener('submit', (e) => {
             phoneInput.style.borderColor = '';
         }, 2000);
         return;
+    }
+
+    // Time validation
+    const citySelect = document.getElementById('city');
+    const storeSelect = document.getElementById('store');
+    const timeInput = document.getElementById('time');
+    
+    const selectedCity = citySelect.value;
+    const selectedStoreName = storeSelect.value;
+    const selectedTime = timeInput.value;
+
+    if (selectedCity && selectedStoreName && selectedTime) {
+        const cityStores = storesData[selectedCity];
+        const store = cityStores.find(s => s.name === selectedStoreName);
+        
+        if (store) {
+            const time = selectedTime;
+            const start = store.hours.start;
+            const end = store.hours.end;
+            
+            if (time < start || time > end) {
+                alert(`Пожалуйста, выберите время в рабочие часы магазина (${store.name}): с ${start} до ${end}`);
+                timeInput.focus();
+                timeInput.style.borderColor = '#c41e3a';
+                setTimeout(() => {
+                    timeInput.style.borderColor = '';
+                }, 2000);
+                return;
+            }
+        }
     }
 
     // Telegram Bot Settings - ВСТАВЬТЕ СЮДА ВАШИ ДАННЫЕ
