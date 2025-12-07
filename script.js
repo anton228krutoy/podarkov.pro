@@ -463,12 +463,20 @@ orderForm.addEventListener('submit', (e) => {
             const end = store.hours.end;
             
             if (time < start || time > end) {
+                // Prevent browser picker from opening immediately if possible (though on submit validation it's handled differently)
+                // For input/change event handling:
+                timeInput.blur(); // Close picker on mobile/desktop if open
+                
                 showErrorModal(`Пожалуйста, выберите время в рабочие часы магазина (${store.name}): с ${start} до ${end}`);
-                timeInput.focus();
+                
+                // Highlight input
                 timeInput.style.borderColor = '#c41e3a';
+                timeInput.classList.remove('has-value'); // Make text gray if needed, or keep white? Let's keep value but red border.
+                
+                // Reset border after some time or on next input
                 setTimeout(() => {
                     timeInput.style.borderColor = '';
-                }, 2000);
+                }, 3000);
                 return;
             }
         }
