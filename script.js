@@ -286,12 +286,64 @@ orderForm.addEventListener('submit', (e) => {
         }, 2000);
         return;
     }
+
+    // Telegram Bot Settings - ВСТАВЬТЕ СЮДА ВАШИ ДАННЫЕ
+    const TOKEN = '8562887595:AAFCEopPa14txyKwlWtjHxixnQYoTr0P27o'; // Например: '123456789:AAH...'
+    const CHAT_ID = '-4622183651';  // Например: '-100...'
+
+    // Collect Data
+    const packagingSelect = document.getElementById('packaging');
+    const storeSelect = document.getElementById('store');
     
-    // Show success modal
-    modal.classList.add('active');
-    
-    // Reset form
-    orderForm.reset();
+    const formData = {
+        packaging: packagingSelect.options[packagingSelect.selectedIndex].text,
+        store: storeSelect.options[storeSelect.selectedIndex].text,
+        date: document.getElementById('date').value,
+        time: document.getElementById('time').value,
+        phone: document.getElementById('phone').value,
+        comment: document.getElementById('comment').value || 'Нет комментария'
+    };
+
+    // Format Message
+    const message = `
+<b>🔔 Новый заказ!</b>
+
+📦 <b>Упаковка:</b> ${formData.packaging}
+🏪 <b>Магазин:</b> ${formData.store}
+📅 <b>Дата:</b> ${formData.date}
+⏰ <b>Время:</b> ${formData.time}
+📱 <b>Телефон:</b> ${formData.phone}
+💬 <b>Комментарий:</b> ${formData.comment}
+    `;
+
+    // Send to Telegram
+    const url = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: message,
+            parse_mode: 'HTML'
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            // Show success modal
+            modal.classList.add('active');
+            // Reset form
+            orderForm.reset();
+        } else {
+            throw new Error('Telegram API Error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Произошла ошибка при отправке заявки. Пожалуйста, попробуйте позже или позвоните нам.');
+    });
 });
 
 // Close modal handlers
