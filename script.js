@@ -462,6 +462,30 @@ orderForm.addEventListener('submit', (e) => {
             const start = store.hours.start;
             const end = store.hours.end;
             
+            // Current time validation
+            const selectedDate = document.getElementById('date').value;
+            const now = new Date();
+            const todayStr = now.toISOString().split('T')[0];
+            
+            if (selectedDate === todayStr) {
+                const currentHours = now.getHours().toString().padStart(2, '0');
+                const currentMinutes = now.getMinutes().toString().padStart(2, '0');
+                const currentTime = `${currentHours}:${currentMinutes}`;
+                
+                if (time <= currentTime) {
+                    timeInput.blur();
+                    showErrorModal('Пожалуйста, выберите время не ранее текущего момента.');
+                    
+                    timeInput.style.borderColor = '#c41e3a';
+                    timeInput.classList.remove('has-value');
+                    
+                    setTimeout(() => {
+                        timeInput.style.borderColor = '';
+                    }, 3000);
+                    return;
+                }
+            }
+
             if (time < start || time > end) {
                 // Prevent browser picker from opening immediately if possible (though on submit validation it's handled differently)
                 // For input/change event handling:
