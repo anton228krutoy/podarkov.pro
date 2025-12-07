@@ -231,6 +231,74 @@ const orderForm = document.getElementById('orderForm');
 const modal = document.getElementById('successModal');
 const modalClose = document.querySelector('.modal-close');
 const modalBtn = document.querySelector('.modal-btn');
+const citySelect = document.getElementById('city');
+const storeSelect = document.getElementById('store');
+
+// ===== Custom Placeholder System =====
+// Uses an absolute positioned span over the select to show placeholder
+// This avoids iOS/Desktop quirks with <option hidden>
+
+function updateSelectState(select) {
+    const wrapper = select.parentElement;
+    if (!wrapper.classList.contains('select-wrapper')) return;
+
+    if (!select.value || select.selectedIndex === -1) {
+        wrapper.classList.add('empty');
+    } else {
+        wrapper.classList.remove('empty');
+    }
+}
+
+// Initialize all selects in wrappers
+document.querySelectorAll('.select-wrapper select').forEach(select => {
+    // Force empty state initially
+    select.selectedIndex = -1;
+    updateSelectState(select);
+
+    // Update on change
+    select.addEventListener('change', () => {
+        updateSelectState(select);
+    });
+});
+
+// Dynamic Store Selection based on City
+function updateStoreOptions() {
+    const city = citySelect.value;
+    const wrapper = storeSelect.parentElement;
+    const placeholderSpan = wrapper.querySelector('.select-placeholder');
+    
+    // Clear store selection
+    storeSelect.innerHTML = '';
+    storeSelect.disabled = !city;
+
+    if (city && storesData[city]) {
+        storesData[city].forEach(store => {
+            const option = document.createElement('option');
+            option.value = store.name;
+            option.text = store.name;
+            storeSelect.appendChild(option);
+        });
+    }
+
+    // Update placeholder text
+    if (placeholderSpan) {
+        placeholderSpan.textContent = city ? 'Выберите магазин' : 'Сначала выберите город';
+    }
+
+    // Reset selection to empty
+    storeSelect.selectedIndex = -1;
+    updateSelectState(storeSelect);
+}
+
+citySelect.addEventListener('change', updateStoreOptions);
+
+// Initialize stores on load
+updateStoreOptions();
+// Also force city/packaging to be empty on load
+citySelect.selectedIndex = -1;
+updateSelectState(citySelect);
+document.getElementById('packaging').selectedIndex = -1;
+updateSelectState(document.getElementById('packaging'));
 
 // Set minimum date to today
 const dateInput = document.getElementById('date');
@@ -293,22 +361,35 @@ orderForm.addEventListener('submit', (e) => {
 
     // Collect Data
     const packagingSelect = document.getElementById('packaging');
-    const storeSelect = document.getElementById('store');
+    // citySelect and storeSelect are already defined above
     
+    const selectedCityOption = citySelect.options[citySelect.selectedIndex];
+    const selectedStoreOption = storeSelect.options[storeSelect.selectedIndex];
+
     const formData = {
         packaging: packagingSelect.options[packagingSelect.selectedIndex].text,
-        store: storeSelect.options[storeSelect.selectedIndex].text,
+        city: selectedCityOption.text,
+        store: selectedStoreOption.text,
         date: document.getElementById('date').value,
         time: document.getElementById('time').value,
         phone: document.getElementById('phone').value,
         comment: document.getElementById('comment').value || 'Нет комментария'
     };
 
+    // Generate Hashtag from Store Name
+    // Removes prefixes like ТЦ/ТРЦ and quotes, replaces spaces with underscores
+    const storeHashtag = '#' + formData.store
+        .replace(/^(ТЦ|ТРЦ|ТРК)\s*/, '')
+        .replace(/[«»"']/g, '')
+        .trim()
+        .replace(/\s+/g, '_');
+
     // Format Message
     const message = `
-<b>🔔 Новый заказ!</b>
+${storeHashtag} <b>Новый заказ!</b>
 
 📦 <b>Упаковка:</b> ${formData.packaging}
+🏙 <b>Город:</b> ${formData.city}
 🏪 <b>Магазин:</b> ${formData.store}
 📅 <b>Дата:</b> ${formData.date}
 ⏰ <b>Время:</b> ${formData.time}
@@ -336,6 +417,12 @@ orderForm.addEventListener('submit', (e) => {
             modal.classList.add('active');
             // Reset form
             orderForm.reset();
+            // Reset all selects to empty state
+            document.querySelectorAll('.select-wrapper select').forEach(select => {
+                select.selectedIndex = -1;
+                updateSelectState(select);
+            });
+            updateStoreOptions();
         } else {
             throw new Error('Telegram API Error');
         }

@@ -55,26 +55,37 @@
                 <form id="orderForm" class="order-form">
                     <div class="form-group">
                         <label for="packaging" class="form-label">Тип упаковки</label>
-                        <select id="packaging" name="packaging" class="form-input" required>
-                            <option value="">Выберите тип упаковки</option>
-                            <option value="box-small">Коробка маленькая (до 20 см)</option>
-                            <option value="box-medium">Коробка средняя (20-40 см)</option>
-                            <option value="box-large">Коробка большая (от 40 см)</option>
-                            <option value="bag">Подарочный пакет</option>
-                            <option value="wrapping">Упаковочная бумага</option>
-                            <option value="basket">Подарочная корзина</option>
-                        </select>
+                        <div class="select-wrapper">
+                            <select id="packaging" name="packaging" class="form-input" required>
+                                <option value="box-small">Коробка маленькая (до 20 см)</option>
+                                <option value="box-medium">Коробка средняя (20-40 см)</option>
+                                <option value="box-large">Коробка большая (от 40 см)</option>
+                                <option value="bag">Подарочный пакет</option>
+                                <option value="wrapping">Упаковочная бумага</option>
+                                <option value="basket">Подарочная корзина</option>
+                            </select>
+                            <span class="select-placeholder">Выберите тип упаковки</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city" class="form-label">Город</label>
+                        <div class="select-wrapper">
+                            <select id="city" name="city" class="form-input" required>
+                                <option value="moscow">Москва</option>
+                                <option value="spb">Санкт-Петербург</option>
+                            </select>
+                            <span class="select-placeholder">Выберите город</span>
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label for="store" class="form-label">Магазин для получения</label>
-                        <select id="store" name="store" class="form-input" required>
-                            <option value="">Выберите магазин</option>
-                            <option value="metropolis">ТЦ «Метрополис»</option>
-                            <option value="atrium">ТЦ «Атриум»</option>
-                            <option value="european">ТЦ «Европейский»</option>
-                            <option value="aviapark">ТРЦ «Авиапарк»</option>
-                        </select>
+                        <div class="select-wrapper">
+                            <select id="store" name="store" class="form-input" required disabled>
+                            </select>
+                            <span class="select-placeholder">Сначала выберите город</span>
+                        </div>
                     </div>
 
                     <div class="form-row">

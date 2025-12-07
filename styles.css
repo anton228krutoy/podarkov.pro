@@ -425,6 +425,32 @@ select.form-input {
     background-position: right 15px center;
 }
 
+.select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.select-placeholder {
+    position: absolute;
+    left: 19px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+    pointer-events: none;
+    font-size: 1rem;
+    font-family: var(--font-body);
+    display: none; /* Hidden by default */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    right: 40px; /* Avoid arrow */
+}
+
+/* Show placeholder when select is "empty" (handled by JS class) */
+.select-wrapper.empty .select-placeholder {
+    display: block;
+}
+
 select.form-input option {
     background: var(--color-bg);
     color: var(--color-text);
