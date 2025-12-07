@@ -361,6 +361,32 @@ const today = new Date().toISOString().split('T')[0];
 dateInput.setAttribute('min', today);
 dateInput.setAttribute('max', '2025-12-31');
 
+// Custom validation messages for date
+dateInput.addEventListener('input', function() {
+    // Сбрасываем кастомную ошибку при любом вводе, чтобы проверить заново
+    this.setCustomValidity('');
+    
+    // Проверка ограничений
+    if (this.validity.rangeUnderflow) {
+        // Если дата меньше min
+        this.setCustomValidity('Пожалуйста, выберите дату не раньше сегодняшнего дня.');
+    } else if (this.validity.rangeOverflow) {
+        // Если дата больше max
+        this.setCustomValidity('К сожалению, запись на 2026 год пока не открыта.');
+    }
+});
+
+// Также добавляем обработчик invalid, чтобы перехватить сообщение при попытке отправки формы
+dateInput.addEventListener('invalid', function() {
+    if (this.validity.rangeUnderflow) {
+        this.setCustomValidity('Пожалуйста, выберите дату не раньше сегодняшнего дня.');
+    } else if (this.validity.rangeOverflow) {
+        this.setCustomValidity('К сожалению, запись на 2026 год пока не открыта.');
+    } else if (this.validity.valueMissing) {
+         this.setCustomValidity('Пожалуйста, выберите дату.');
+    }
+});
+
 // Phone number formatting
 const phoneInput = document.getElementById('phone');
 
