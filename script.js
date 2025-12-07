@@ -4,51 +4,94 @@ const storesData = {
         {
             name: 'ТЦ «Мега Белая Дача»',
             address: '1-й Покровский пр-д, 5, Котельники',
-            hours: { start: '10:00', end: '23:00' }
+            hours: { start: '10:00', end: '23:00' },
+            openDate: '2025-12-05',
+            mapUrl: 'https://yandex.ru/maps/org/15154531028'
         },
         {
             name: 'ТРЦ «Город»',
             address: 'Шоссе Энтузиастов, 12к2',
-            hours: { start: '10:00', end: '22:00' }
+            hours: { start: '10:00', end: '22:00' },
+            openDate: '2025-12-16',
+            mapUrl: ''
         },
         {
             name: 'ТРЦ «Облака»',
             address: 'Ореховый б-р, д.22 А',
-            hours: { start: '10:00', end: '22:00' }
+            hours: { start: '10:00', end: '22:00' },
+            openDate: '2025-12-18',
+            mapUrl: ''
         },
         {
             name: 'ТРЦ «Косино Парк»',
             address: 'Святоозёрская ул., 1А',
-            hours: { start: '10:00', end: '22:00' }
+            hours: { start: '10:00', end: '22:00' },
+            openDate: '2025-12-17',
+            mapUrl: ''
         }
     ],
     spb: [
         {
             name: 'ТЦ «Галерея»',
             address: 'Лиговский пр., 30А',
-            hours: { start: '10:00', end: '23:00' }
+            hours: { start: '10:00', end: '23:00' },
+            openDate: '2025-12-10',
+            mapUrl: ''
         },
         {
             name: 'ТЦ «Рио»',
             address: 'Ул. Фучика, д.2',
-            hours: { start: '10:00', end: '22:00' }
+            hours: { start: '10:00', end: '22:00' },
+            openDate: '2025-12-11',
+            mapUrl: ''
         }
     ]
 };
 
 // ===== Stores Rendering =====
+function isStoreOpen(store) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const openDate = new Date(store.openDate);
+    openDate.setHours(0, 0, 0, 0);
+    return today >= openDate;
+}
+
+function formatOpenDate(dateStr) {
+    const date = new Date(dateStr);
+    const day = date.getDate();
+    const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 
+                    'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+    const month = months[date.getMonth()];
+    return `${day} ${month}`;
+}
+
 function renderStores(city) {
     const storesGrid = document.getElementById('storesGrid');
     const stores = storesData[city] || [];
     
-    storesGrid.innerHTML = stores.map(store => `
-        <div class="store-card">
-            <div class="store-icon">📍</div>
-            <h3 class="store-name">${store.name}</h3>
-            <p class="store-address">${store.address}</p>
-            <p class="store-hours">Ежедневно: ${store.hours.start} — ${store.hours.end}</p>
-        </div>
-    `).join('');
+    storesGrid.innerHTML = stores.map(store => {
+        const isOpen = isStoreOpen(store);
+        const cardClass = isOpen ? 'store-card' : 'store-card not-open';
+        const hoursContent = isOpen 
+            ? `<p class="store-hours">Ежедневно: ${store.hours.start} — ${store.hours.end}</p>`
+            : `<p class="store-opening-date">Работает с ${formatOpenDate(store.openDate)}</p>`;
+        
+        const cardContent = `
+            <div class="${cardClass}">
+                <div class="store-icon">📍</div>
+                <h3 class="store-name">${store.name}</h3>
+                <p class="store-address">${store.address}</p>
+                ${hoursContent}
+            </div>
+        `;
+        
+        // Wrap in link only if mapUrl exists
+        if (store.mapUrl) {
+            return `<a href="${store.mapUrl}" target="_blank" rel="noopener noreferrer" class="store-card-link">${cardContent}</a>`;
+        }
+        return cardContent;
+    }).join('');
 }
 
 // ===== City Selector =====
@@ -331,6 +374,7 @@ function updateStoreOptions() {
             const option = document.createElement('option');
             option.value = store.name;
             option.text = store.name;
+            option.dataset.openDate = store.openDate;
             storeSelect.appendChild(option);
         });
     }
@@ -343,6 +387,30 @@ function updateStoreOptions() {
     // Reset selection to empty
     storeSelect.selectedIndex = -1;
     updateSelectState(storeSelect);
+}
+
+// Get selected store's open date
+function getSelectedStoreOpenDate() {
+    const selectedOption = storeSelect.options[storeSelect.selectedIndex];
+    return selectedOption ? selectedOption.dataset.openDate : null;
+}
+
+// Check if selected date is valid for selected store
+function validateDateForStore() {
+    const selectedDate = dateInput.value;
+    const openDate = getSelectedStoreOpenDate();
+    
+    if (!selectedDate || !openDate) return true;
+    
+    if (selectedDate < openDate) {
+        const storeName = storeSelect.value;
+        const formattedDate = formatOpenDate(openDate);
+        showErrorModal(`Магазин ${storeName} открывается ${formattedDate}. Пожалуйста, выберите дату не раньше ${formattedDate}.`);
+        dateInput.value = '';
+        updateInputState(dateInput);
+        return false;
+    }
+    return true;
 }
 
 citySelect.addEventListener('change', updateStoreOptions);
@@ -379,6 +447,16 @@ dateInput.addEventListener('input', function() {
         showErrorModal('К сожалению, запись на 2026 год пока не открыта.');
         this.value = ''; // Reset value to force user to pick again
         updateInputState(this);
+    } else {
+        // Проверка даты открытия магазина
+        validateDateForStore();
+    }
+});
+
+// Validate date when store selection changes
+storeSelect.addEventListener('change', function() {
+    if (dateInput.value) {
+        validateDateForStore();
     }
 });
 
@@ -441,6 +519,11 @@ orderForm.addEventListener('submit', (e) => {
         setTimeout(() => {
             phoneInput.style.borderColor = '';
         }, 2000);
+        return;
+    }
+
+    // Store open date validation
+    if (!validateDateForStore()) {
         return;
     }
 
