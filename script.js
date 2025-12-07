@@ -261,6 +261,52 @@ document.querySelectorAll('.select-wrapper select').forEach(select => {
     });
 });
 
+// ===== iPad Select Bug Fixes =====
+// Detect iPad/iOS
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+              (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
+
+if (isIOS) {
+    const allSelects = document.querySelectorAll('.select-wrapper select');
+    
+    // Bug 1 Fix: Reset selects on orientation change
+    window.addEventListener('orientationchange', () => {
+        allSelects.forEach(select => {
+            select.blur();
+        });
+        // Force layout recalculation after orientation settles
+        setTimeout(() => {
+            allSelects.forEach(select => {
+                const wrapper = select.parentElement;
+                // Trigger reflow
+                wrapper.style.display = 'none';
+                wrapper.offsetHeight; // Force reflow
+                wrapper.style.display = '';
+            });
+        }, 300);
+    });
+    
+    // Bug 2 Fix: Prevent rapid select switching issues
+    // Handle focus explicitly on touchstart
+    allSelects.forEach(select => {
+        select.addEventListener('touchstart', (e) => {
+            // Find currently focused element
+            const activeElement = document.activeElement;
+            
+            // If another select is focused, blur it immediately
+            if (activeElement && activeElement.tagName === 'SELECT' && activeElement !== select) {
+                // Blur the currently open select
+                activeElement.blur();
+                
+                // Stop propagation to prevent default browser behavior of closing/reopening
+                // e.preventDefault(); 
+                // Don't prevent default here, let the touch trigger focus on the new select naturally
+                // But the blur above ensures the state is clean before that happens
+            }
+        }, { passive: true });
+    });
+}
+
 // Dynamic Store Selection based on City
 function updateStoreOptions() {
     const city = citySelect.value;
