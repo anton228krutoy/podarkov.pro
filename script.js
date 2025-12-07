@@ -431,6 +431,10 @@ dateInput.setAttribute('max', '2025-12-31');
 
 // Custom validation messages for date
 dateInput.addEventListener('input', function() {
+    this.setCustomValidity('');
+});
+
+dateInput.addEventListener('blur', function() {
     // Сбрасываем кастомную ошибку при любом вводе, чтобы проверить заново
     this.setCustomValidity('');
     
