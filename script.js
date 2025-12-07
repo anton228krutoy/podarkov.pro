@@ -601,7 +601,7 @@ orderForm.addEventListener('submit', (e) => {
 
     // Telegram Bot Settings - ВСТАВЬТЕ СЮДА ВАШИ ДАННЫЕ
     const TOKEN = '8562887595:AAFCEopPa14txyKwlWtjHxixnQYoTr0P27o'; // Например: '123456789:AAH...'
-    const CHAT_ID = '-4622183651';  // Например: '-100...'
+    const CHAT_ID = '-1003328165794';  // Супергруппа "Заказы с сайта"
 
     // Collect Data
     const packagingSelect = document.getElementById('packaging');
