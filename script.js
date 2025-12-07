@@ -370,11 +370,18 @@ dateInput.addEventListener('input', function() {
     if (this.validity.rangeUnderflow) {
         // Если дата меньше min
         this.setCustomValidity('Пожалуйста, выберите дату не раньше сегодняшнего дня.');
+        showErrorModal('Пожалуйста, выберите дату не раньше сегодняшнего дня.');
+        this.value = ''; // Reset value to force user to pick again
+        updateInputState(this);
     } else if (this.validity.rangeOverflow) {
         // Если дата больше max
         this.setCustomValidity('К сожалению, запись на 2026 год пока не открыта.');
+        showErrorModal('К сожалению, запись на 2026 год пока не открыта.');
+        this.value = ''; // Reset value to force user to pick again
+        updateInputState(this);
     }
 });
+
 
 // Также добавляем обработчик invalid, чтобы перехватить сообщение при попытке отправки формы
 dateInput.addEventListener('invalid', function() {
@@ -456,7 +463,7 @@ orderForm.addEventListener('submit', (e) => {
             const end = store.hours.end;
             
             if (time < start || time > end) {
-                alert(`Пожалуйста, выберите время в рабочие часы магазина (${store.name}): с ${start} до ${end}`);
+                showErrorModal(`Пожалуйста, выберите время в рабочие часы магазина (${store.name}): с ${start} до ${end}`);
                 timeInput.focus();
                 timeInput.style.borderColor = '#c41e3a';
                 setTimeout(() => {
@@ -559,10 +566,36 @@ modal.addEventListener('click', (e) => {
     }
 });
 
+// Error Modal Handlers
+const errorModal = document.getElementById('errorModal');
+const errorModalClose = document.querySelector('.error-modal-close');
+const errorModalBtn = document.querySelector('.error-modal-btn');
+const errorModalText = document.getElementById('errorModalText');
+
+function showErrorModal(message) {
+    errorModalText.textContent = message;
+    errorModal.classList.add('active');
+}
+
+function closeErrorModal() {
+    errorModal.classList.remove('active');
+}
+
+if (errorModalClose) errorModalClose.addEventListener('click', closeErrorModal);
+if (errorModalBtn) errorModalBtn.addEventListener('click', closeErrorModal);
+if (errorModal) {
+    errorModal.addEventListener('click', (e) => {
+        if (e.target === errorModal) {
+            closeErrorModal();
+        }
+    });
+}
+
 // Close modal with Escape key
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('active')) {
-        closeModal();
+    if (e.key === 'Escape') {
+        if (modal.classList.contains('active')) closeModal();
+        if (errorModal && errorModal.classList.contains('active')) closeErrorModal();
     }
 });
 
