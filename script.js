@@ -667,8 +667,8 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             let extraOffset = 0;
             if (targetId === '#order') {
                 extraOffset = -75;
-            } else if (targetId === '#stores' && isMobile) {
-                extraOffset = -65; // Adjust this value as needed
+            } else if (targetId === '#stores') {
+                extraOffset = isMobile ? -65 : -60;
             }
             const headerOffset = baseOffset + extraOffset;
             
