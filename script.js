@@ -10,10 +10,10 @@ const storesData = {
         },
         {
             name: 'ТРЦ «Город»',
-            address: 'Шоссе Энтузиастов, 12к2',
+            address: 'Рязанский пр-т, 2к2',
             hours: { start: '10:00', end: '22:00' },
             openDate: '2025-12-16',
-            mapUrl: 'https://yandex.ru/maps/-/CDRRjLZ8'
+            mapUrl: 'https://yandex.ru/maps/-/CDsaIGKp'
         },
         {
             name: 'ТРЦ «Облака»',
