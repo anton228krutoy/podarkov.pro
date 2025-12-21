@@ -13,21 +13,21 @@ const storesData = {
             address: 'Шоссе Энтузиастов, 12к2',
             hours: { start: '10:00', end: '22:00' },
             openDate: '2025-12-16',
-            mapUrl: ''
+            mapUrl: 'https://yandex.ru/maps/-/CDRRjLZ8'
         },
         {
             name: 'ТРЦ «Облака»',
             address: 'Ореховый б-р, д.22 А',
             hours: { start: '10:00', end: '22:00' },
             openDate: '2025-12-18',
-            mapUrl: ''
+            mapUrl: 'https://yandex.ru/maps/-/CDeR5G08'
         },
         {
             name: 'ТРЦ «Косино Парк»',
             address: 'Святоозёрская ул., 1А',
             hours: { start: '10:00', end: '22:00' },
             openDate: '2025-12-17',
-            mapUrl: ''
+            mapUrl: 'https://yandex.ru/maps/-/CDaaqN47'
         }
     ],
     spb: [
@@ -36,14 +36,14 @@ const storesData = {
             address: 'Лиговский пр., 30А',
             hours: { start: '10:00', end: '23:00' },
             openDate: '2025-12-10',
-            mapUrl: ''
+            mapUrl: 'https://yandex.ru/maps/-/CLUi76Z2'
         },
         {
             name: 'ТЦ «Рио»',
             address: 'Ул. Фучика, д.2',
             hours: { start: '10:00', end: '22:00' },
             openDate: '2025-12-11',
-            mapUrl: ''
+            mapUrl: 'https://yandex.ru/maps/-/CHFWNWnk'
         }
     ]
 };
