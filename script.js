@@ -115,9 +115,6 @@ renderStores('moscow');
 
 // ===== Form Handling =====
 const orderForm = document.getElementById('orderForm');
-const modal = document.getElementById('successModal');
-const modalClose = document.querySelector('.modal-close');
-const modalBtn = document.querySelector('.modal-btn');
 const citySelect = document.getElementById('city');
 const storeSelect = document.getElementById('store');
 
@@ -533,20 +530,6 @@ ${storeHashtag} <b>Новый заказ!</b>
     });
 });
 
-// Close modal handlers
-function closeModal() {
-    modal.classList.remove('active');
-}
-
-modalClose.addEventListener('click', closeModal);
-modalBtn.addEventListener('click', closeModal);
-
-modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-        closeModal();
-    }
-});
-
 // Error Modal Handlers
 const errorModal = document.getElementById('errorModal');
 const errorModalClose = document.querySelector('.error-modal-close');
@@ -572,10 +555,9 @@ if (errorModal) {
     });
 }
 
-// Close modal with Escape key
+// Close error modal with Escape key
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-        if (modal.classList.contains('active')) closeModal();
         if (errorModal && errorModal.classList.contains('active')) closeErrorModal();
     }
 });
